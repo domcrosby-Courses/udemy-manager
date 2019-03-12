@@ -1,7 +1,7 @@
 // imrc
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { emailChanged } from '../actions';
+import { emailChanged } from '../ducks/auth';
 import { Card, CardSection, Input, Button } from '../Components';
 
 const propTypes = {};
@@ -21,6 +21,7 @@ class LoginForm extends Component {
             label="Email"
             placeholder="email@gmail.com"
             onChangeText={this.onEmailChange.bind(this)}
+            value={this.props.email}
           />
         </CardSection>
         <CardSection>
@@ -34,8 +35,14 @@ class LoginForm extends Component {
   }
 }
 
+const mapStateToProps = state => {
+  return {
+    email: state.auth.email
+  };
+};
+
 export default connect(
-  null,
+  mapStateToProps,
   { emailChanged }
 )(LoginForm);
 
