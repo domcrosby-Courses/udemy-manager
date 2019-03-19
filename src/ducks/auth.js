@@ -12,7 +12,6 @@ const INITIAL_STATE = { email: '', password: '', user: null, error: '', loading:
 
 // Reducer - must be export default function reducer
 export default function reducer(state = INITIAL_STATE, action) {
-  console.log(action);
   switch (action.type) {
     case EMAIL_CHANGED:
       // make new object - you can't keep the old
@@ -47,7 +46,6 @@ export function passwordChanged(text) {
 
 // curly braces as only 1 argument allowed
 export function loginUser({ email, password }) {
-  console.log('function called');
   return dispatch => {
     dispatch({ type: LOGIN_USER });
     firebase
@@ -66,7 +64,6 @@ export function loginUser({ email, password }) {
 
 // helper function
 const loginUserSuccess = (dispatch, user) => {
-  console.log('logged in');
   dispatch({ type: LOGIN_USER_SUCCESS, payload: user });
 };
 
