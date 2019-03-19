@@ -1,8 +1,10 @@
 // imrc
 import React, { Component } from 'react';
+// imrn
+import { View, Text } from 'react-native';
 import { connect } from 'react-redux';
-import { emailChanged, passwordChanged } from '../ducks/auth';
-import { Card, CardSection, Input, Button } from '../Components';
+import { emailChanged, passwordChanged, loginUser } from '../ducks/auth';
+import { Card, CardSection, Input, Button, Spinner } from '../Components';
 
 const propTypes = {};
 
@@ -15,6 +17,29 @@ class LoginForm extends Component {
 
   onPasswordChange(text) {
     this.props.passwordChanged(text);
+  }
+
+  onButtonPress() {
+    console.log('button pressed');
+    const { email, password } = this.props;
+    this.props.loginUser({ email, password });
+  }
+
+  renderError() {
+    if (this.props.error) {
+      return (
+        <View style={{ backgroundColor: 'white' }}>
+          <Text style={styles.errorTextStyle}>{this.props.error}</Text>
+        </View>
+      );
+    }
+  }
+
+  renderButton() {
+    if (this.props.loading) {
+      return <Spinner />;
+    }
+    return <Button onPress={this.onButtonPress.bind(this)}>Login</Button>;
   }
 
   render() {
@@ -37,24 +62,33 @@ class LoginForm extends Component {
             value={this.props.password}
           />
         </CardSection>
-        <CardSection>
-          <Button>Login</Button>
-        </CardSection>
+        {this.renderError()}
+        <CardSection>{this.renderButton()}</CardSection>
       </Card>
     );
   }
 }
 
+const styles = {
+  errorTextStyle: {
+    fontSize: 20,
+    alignSelf: 'center',
+    color: 'red'
+  }
+};
+
 const mapStateToProps = state => {
   return {
     email: state.auth.email,
-    password: state.auth.password
+    password: state.auth.password,
+    error: state.auth.error,
+    loading: state.auth.loading
   };
 };
 
 export default connect(
   mapStateToProps,
-  { emailChanged, passwordChanged }
+  { emailChanged, passwordChanged, loginUser }
 )(LoginForm);
 
 LoginForm.propTypes = propTypes;
